@@ -24,3 +24,21 @@ jobs:
       run: swift package resolve
     - name: View downloaded binary frameworks
       run: ls .build/artifacts/cloud-sdk-ios
+    - name: Verify platform
+      run: |
+        VERSION=$(cat Package.swift | grep 'let version')
+        PLATFORM=$(cat Package.swift | grep 'platforms')
+        if [[ "$VERSION" == *"\"7"* ]]; then
+            if [[ "$PLATFORM" == *14* ]]; then
+              exit 0
+            else
+              exit 1
+            fi
+        fi
+        if [[ "$VERSION" == *"\"6"* ]]; then
+            if [[ "$PLATFORM" == *13* ]]; then
+              exit 0
+            else
+              exit 1
+            fi
+        fi
